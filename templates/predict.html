@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>予測結果</h1>
+<form action="/predict" method="post" class="search-form">
+    <label for="name">探している場所:</label>
+    <input type="text" id="name" name="name" value="{{ request.form['name'] }}" required>
+    <button type="submit">検索</button>
+</form>
+
+{% if recommendations is not none and not recommendations.empty %}
+    <div class="recommendation">
+        <h2>おすすめの飲食店:</h2>
+        {% set row = recommendations.iloc[0] %}
+        <strong>場所名:</strong> {{ row['Store Name'] }}<br>
+        <strong>口コミ:</strong> {{ row['Comment'] }}<br>
+        <strong>類似度スコア:</strong> {{ row['similarity']|round(2) }}
+    </div>
+{% else %}
+    <p class="no-results">該当する結果が見つかりませんでした。</p>
+{% endif %}
+
+<a href="/">戻る</a>
+{% endblock %}
